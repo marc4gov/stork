@@ -28,6 +28,7 @@ def s_agent_entertainment(params, substep, state_history, prev_state, policy_inp
             updated_agents[label]['bucket_list'].pop(attraction_label)
     return ('agents', updated_agents)
 
+
 def p_accomodate_persons(params, substep, state_history, prev_state):
     """
     Accomodate the nearby and willing persons into the attraction.
@@ -44,6 +45,18 @@ def p_accomodate_persons(params, substep, state_history, prev_state):
     agent_delta_locked = {}
     agent_delta_location = {}
     agent_delta_queue = {}
+    # first, empty any queues
+    for attraction_label, attraction_properties in luring_attractions.items():
+        location = attraction_properties['location']
+        queued = attraction_properties['queued']
+        if queued > 0:
+            waiting_persons = {k: v for k, v in persons.items()
+                 if v['queued'] == True and v['location'] == location}
+            if attraction_properties['capacity'] < queued:
+                # select people until full
+            else:
+                #accomodate everyone in line
+
     for attraction_label, attraction_properties in luring_attractions.items():
         location = attraction_properties['location']
         queued = attraction_properties['queued']

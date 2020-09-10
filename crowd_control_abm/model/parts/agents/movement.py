@@ -7,7 +7,8 @@ def p_move_agents(params, substep, state_history, prev_state):
     """
     agents = prev_state['agents']
     sites = prev_state['sites']
-    moving_persons = {k: v for k, v in agents.items() if v['type'] == 'person' and v['locked'] == False}
+    moving_persons = {k: v for k, v in agents.items() 
+            if v['type'] == 'person' and v['locked'] == False and v['queued'] == False}
     attractions = {k: v for k, v in agents.items() if v['type'] == 'attraction'}
     busy_locations = [agent['location'] for agent in agents.values()]
     new_locations = {}
@@ -18,7 +19,8 @@ def p_move_agents(params, substep, state_history, prev_state):
             busy_locations.append(new_location)
         else:
             continue
-    return {'update_agent_location': new_locations}
+    return {'update_agent_location': new_locations,
+            'update_attraction_queue' : new_queues}
 
 
 def s_agent_location(params, substep, state_history, prev_state, policy_input):
