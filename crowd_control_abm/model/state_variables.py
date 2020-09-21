@@ -31,12 +31,13 @@ MAX_ATTRACTION_CAPACITY = 10
 ## Helper functions
 
 def new_person_agent(agent_type: str, location: Tuple[int, int], attractions: Dict[str, dict],
-              money: int=100, queued: bool=False, stay: int=0) -> dict:
+              money: int=100, queued: bool=False, locked: bool=False, stay: int=0) -> dict:
     agent = {'type': agent_type,
              'location': location,
              'money': money,
              'bucket_list' : attractions,
              'queued': queued,
+             'locked': locked,
              'stay': stay}
     return agent
 

@@ -1,9 +1,12 @@
 import random
+from typing import *
 
-def located_attraction(location: Tuple[int, int], attractions: Dict[str, dict]) -> str:
-    for k, v in attractions:
-        if v['location'] == location return k
-        else continue
+def located_attraction(location: tuple, attractions: Dict[str, dict]) -> str:
+    for k, v in attractions.items():
+        if v['location'] == location:
+            return k
+        else:
+            continue
 
 def check_bucket_list(attraction_label: str, persons: Dict[str, dict]) -> Dict[str, dict]:
     people = {k: v for k, v in persons.items()
@@ -20,6 +23,6 @@ def select_persons(number: int, candidates: Dict[str, dict]) -> (Dict[str, dict]
             candidates.pop(k)
             times -= 1
         except IndexError:
-            print('item is popped')
+            print('selected is popped')
             break
     return (selected, candidates)

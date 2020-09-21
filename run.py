@@ -2,8 +2,7 @@
 from cadCAD.engine import ExecutionMode, ExecutionContext, Executor
 
 # Simulation configs, input any new simulations here
-from prey_predator_sd import config
-from prey_predator_abm import config
+from crowd_control_abm import config
 #from {new_simulation} import config
 
 from cadCAD import configs

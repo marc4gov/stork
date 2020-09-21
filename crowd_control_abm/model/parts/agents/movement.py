@@ -1,5 +1,4 @@
-from ..location import get_free_location
-
+from ..location import get_next_location
 
 def p_move_agents(params, substep, state_history, prev_state):
     """
@@ -13,15 +12,13 @@ def p_move_agents(params, substep, state_history, prev_state):
     busy_locations = [agent['location'] for agent in agents.values()]
     new_locations = {}
     for label, properties in moving_persons.items():
-        new_location = get_next_location(properties['location'], sites, attractions)
+        new_location = get_next_location(properties['location'], sites, busy_locations, attractions)
         if new_location is not False:
             new_locations[label] = new_location
             busy_locations.append(new_location)
         else:
             continue
-    return {'update_agent_location': new_locations,
-            'update_attraction_queue' : new_queues}
-
+    return {'update_agent_location': new_locations}
 
 def s_agent_location(params, substep, state_history, prev_state, policy_input):
     updated_agents = prev_state['agents'].copy()

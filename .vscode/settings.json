@@ -1,3 +1,4 @@
 {
-    "python.pythonPath": "/Users/marc/cadcad-env/bin/ipython3"
+    "python.pythonPath": "/Users/marc/cadcad-env/bin/python3",
+    "python.dataScience.jupyterServerURI": "local"
 }

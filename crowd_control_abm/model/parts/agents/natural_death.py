@@ -4,12 +4,9 @@ def p_natural_death(params, substep, state_history, prev_state):
     Remove person agents which are done.
     """
     agents = prev_state['agents']
-    agents_to_remove = []
-    for agent_label, agent_properties in agents.items():
-        to_remove = len(agent_properties['bucket_list']) == 0 
-        if to_remove:
-          agents_to_remove.append(agent_label)
-    return {'remove_agents': agents_to_remove}
+    leaving_persons = {k: v for k, v in agents.items() 
+            if v['type'] == 'person' and len(v['bucket_list']) == 0 }
+    return {'remove_agents': leaving_persons}
 
 
 def s_agent_remove(params, substep, state_history, prev_state, policy_input):

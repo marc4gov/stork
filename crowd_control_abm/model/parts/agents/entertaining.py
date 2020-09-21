@@ -29,77 +29,108 @@ def s_agent_entertainment(params, substep, state_history, prev_state, policy_inp
     return ('agents', updated_agents)
 
 
-def p_accomodate_persons(params, substep, state_history, prev_state):
+def p_empty_queue(params, substep, state_history, prev_state):
     """
-    Accomodate the nearby and willing persons into the attraction.
+    Empty the queue and get waiting persons into the attraction.
     """
     agents = prev_state['agents']
-    capacity_threshold = params['capacity_threshold']
+    # capacity_threshold = params['capacity_treshold']
     persons = {k: v for k, v in agents.items()
              if v['type'] == 'person'}
     attractions = {k: v for k, v in agents.items()
                  if v['type'] == 'attraction'}
     luring_attractions = {k: v for k, v in attractions.items()
-                        if v['capacity'] >= params['capacity_threshold']}
+                        if v['capacity'] > 0 and v['queued'] > 0}
     agent_delta_money = {}
     agent_delta_locked = {}
-    agent_delta_location = {}
     agent_delta_queue = {}
-    # first, empty any queues
-    for attraction_label, attraction_properties in luring_attractions.items():
-        location = attraction_properties['location']
-        queued = attraction_properties['queued']
-        if queued > 0:
-            waiting_persons = {k: v for k, v in persons.items()
-                 if v['queued'] == True and v['location'] == location}
-            if attraction_properties['capacity'] < queued:
-                # select people until full
-            else:
-                #accomodate everyone in line
+    agent_delta_capacity = {}
 
     for attraction_label, attraction_properties in luring_attractions.items():
         location = attraction_properties['location']
         queued = attraction_properties['queued']
         delta_money = attraction_properties['money']
-        nearby_persons = nearby_agents(location, persons)
-        nearby_persons = check_bucket_list(attraction_label, nearby_persons)
-        # check if capacity doesn't exceed treshold
-        delta_attraction_capacity = attraction_properties['capacity'] - len(nearby_persons)
-        if delta_attraction_capacity >= 0:
-            agent_delta_capacity[attraction_label] = delta_attraction_capacity
-            for lured_person_label, lured_person_properties in nearby_persons.items():
-                agent_delta_money[attraction_label] = delta_money
-                agent_delta_money[lured_person_label] = -1 * delta_money
-                agent_delta_locked[lured_person_label] = True
-        else:
-            (selected_persons, queued_persons) = select_persons(attraction_candidates + delta_attraction_capacity, nearby_persons)
+        capacity = attraction_properties['capacity']
+        waiting_persons = {k: v for k, v in persons.items()
+                if v['queued'] == True and v['location'] == location}
+        if capacity < queued:
+            # select people until full
+            (selected_persons, queued_persons) = select_persons(capacity, waiting_persons)
+            agent_delta_queue[attraction_label] = queued - capacity
+            agent_delta_capacity[attraction_label] = 0
             # selected persons get entrance
-            for lured_person_label, lured_person_properties in selected_persons.items():
+            for person_label, person_properties in selected_persons.items():
                 agent_delta_money[attraction_label] = delta_money
-                agent_delta_money[lured_person_label] = -1 * delta_money
-                agent_delta_locked[lured_person_label] = True
-                agent_delta_location[lured_person_label] = location
-            # not selected wait in line
-            agent_delta_queue[attraction_label] = queued
+                agent_delta_money[person_label] = -1 * delta_money
+                agent_delta_locked[person_label] = True
+                agent_delta_queue[person_label] = False
+            # not selected still wait in line
             for queued_person_label, queued_person_properties in queued_persons.items():
-                agent_delta_queue[attraction_label] += 1
                 agent_delta_queue[queued_person_label] = True
+        else:
+            #accomodate everyone in queue
+            agent_delta_queue[attraction_label] = 0
+            agent_delta_capacity[attraction_label] = capacity - queued
+            for person_label, person_properties in waiting_persons.items():
+                agent_delta_money[attraction_label] = delta_money
+                agent_delta_money[person_label] = -1 * delta_money
+                agent_delta_locked[person_label] = True
+                agent_delta_queue[person_label] = False
+
     return {
             'agent_delta_money': agent_delta_money,
             'agent_delta_locked': agent_delta_locked,
+            'agent_delta_queue': agent_delta_queue,
+            'agent_delta_capacity': agent_delta_capacity,
+    }
+
+def s_empty_queue(params, substep, state_history, prev_state, policy_input):
+    updated_agents = prev_state['agents'].copy()
+    for label, delta_queue in policy_input['agent_delta_queue'].items():
+        updated_agents[label]['queued'] = delta_queue
+    for label, delta_money in policy_input['agent_delta_money'].items():
+        updated_agents[label]['money'] += delta_money
+    for label, delta_locked in policy_input['agent_delta_locked'].items():
+        updated_agents[label]['locked'] = delta_locked
+    for label, delta_capacity in policy_input['agent_delta_capacity'].items():
+        updated_agents[label]['capacity'] = delta_capacity
+    return ('agents', updated_agents)
+
+def p_accomodate_persons(params, substep, state_history, prev_state):
+    """
+    Accomodate the nearby and willing persons into the attraction.
+    """
+    agents = prev_state['agents']
+    persons = {k: v for k, v in agents.items()
+             if v['type'] == 'person'}
+    attractions = {k: v for k, v in agents.items()
+                 if v['type'] == 'attraction'}
+    luring_attractions = {k: v for k, v in attractions.items()
+                        if v['capacity'] > 0}
+    agent_delta_location = {}
+    agent_delta_queue = {}
+
+    for attraction_label, attraction_properties in luring_attractions.items():
+        location = attraction_properties['location']
+        queued = attraction_properties['queued']
+        nearby_persons = nearby_agents(location, persons)
+        nearby_persons = check_bucket_list(attraction_label, nearby_persons)
+        # wait in line
+        agent_delta_queue[attraction_label] = queued + len(nearby_persons)
+        for queued_person_label, queued_person_properties in nearby_persons.items():
+            agent_delta_queue[queued_person_label] = True
+            agent_delta_location[queued_person_label] = location
+            
+    return {
             'agent_delta_location': agent_delta_location,
             'agent_delta_queue': agent_delta_queue
     }
 
-    def s_update_agents(params, substep, state_history, prev_state, policy_input):
+def s_accomodate_persons(params, substep, state_history, prev_state, policy_input):
     updated_agents = prev_state['agents'].copy()
     for label, delta_location in policy_input['agent_delta_location'].items():
         updated_agents[label]['location'] = delta_location
     for label, delta_queue in policy_input['agent_delta_queue'].items():
         updated_agents[label]['queued'] = delta_queue
-    for label, delta_money in policy_input['agent_delta_money'].items():
-        updated_agents[label]['money'] = delta_money
-    for label, delta_locked in policy_input['agent_delta_locked'].items():
-        updated_agents[label]['locked'] = delta_locked
     return ('agents', updated_agents)
 
