@@ -20,14 +20,6 @@ partial_state_update_block = [
     },
     {
         'policies': {
-            'accomodate_persons': p_accomodate_persons
-        },
-        'variables': {
-            'agents': s_accomodate_persons,
-        }
-    },
-    {
-        'policies': {
             'empty_queue': p_empty_queue
         },
         'variables': {
@@ -42,12 +34,20 @@ partial_state_update_block = [
             'agents': s_agent_entertainment
         }
     },
-    # {
-    #     'policies': {
-    #         'natural_death': p_natural_death
-    #     },
-    #     'variables': {
-    #         'agents': s_agent_remove
-    #     }
-    # }
+    {
+        'policies': {
+            'accomodate_persons': p_accomodate_persons
+        },
+        'variables': {
+            'agents': s_accomodate_persons,
+        }
+    },
+    {
+        'policies': {
+            'remove_agent': p_agent_remove
+        },
+        'variables': {
+            'agents': s_agent_remove
+        }
+    }
 ]

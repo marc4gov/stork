@@ -37,7 +37,12 @@ def check_next_location(position: tuple,
     potential_sites = [(position[0], position[1] + 1),
                        (position[0], position[1] - 1),
                        (position[0] + 1, position[1]),
-                       (position[0] - 1, position[1])]
+                       (position[0] - 1, position[1]),
+                        (position[0] + 1, position[1] + 1),
+                       (position[0] - 1, position[1] - 1),                   
+                        (position[0] + 1, position[1] - 1),
+                       (position[0] - 1, position[1] + 1), 
+                       ]
     potential_sites = [(site[0] % N, site[1] % M) for site in potential_sites]
     
     valid_sites = [site for site in potential_sites if site not in busy_locations]
@@ -62,7 +67,7 @@ def get_next_location(position: tuple, attraction_location: tuple,
                       busy_locations: List[tuple],
                      ):
     """
-    Gets an random free location neighboring an position. Returns False if
+    Gets a free location neighboring an position. Returns False if
     there aren't any location available.
     """
     available_locations = check_next_location(position, all_sites, busy_locations)
