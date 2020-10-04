@@ -7,7 +7,7 @@ sys_params = {
     'maximum_crowd_per_site': [8],
     'move_probability': [0.8],
     'person_max_duration': [35],
-    'attraction_max_stay': [5],
+    'attraction_max_stay': [3],
     'capacity_treshold': [0],
     'attraction_distance_threshold': [6], # When the agents start reproducing
     'money_threshold': [10], # When the person agents are almost broke

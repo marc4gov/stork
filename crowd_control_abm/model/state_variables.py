@@ -25,8 +25,8 @@ INITIAL_CROWD = 1
 
 ### Initial agent count
 PERSON_COUNT = 50
-ATTRACTION_COUNT = 5
-MAX_ATTRACTION_CAPACITY = 2
+ATTRACTION_COUNT = 10
+MAX_ATTRACTION_CAPACITY = 5
 
 ## Helper functions
 
@@ -43,7 +43,7 @@ def new_person_agent(agent_type: str, location: Tuple[int, int], attractions: Di
     return agent
 
 def new_attraction_agent(agent_type: str, location: Tuple[int, int],
-              money: int=0, waiting_line: int=0, capacity: int=MAX_ATTRACTION_CAPACITY) -> dict:
+              money: int=0, waiting_line: [str] = [''], capacity: int=MAX_ATTRACTION_CAPACITY) -> dict:
     agent = {'type': agent_type,
              'location': location,
              'money': money,
@@ -99,8 +99,11 @@ locations = [(n, m) for n in range(N) for m in range(M)]
 initial_agents = generate_agents(locations, ATTRACTION_COUNT, PERSON_COUNT)
 
 persons = {k: v for k, v in initial_agents.items() if v['type'] == 'person' }
+attrs = {k: v for k, v in initial_agents.items() if v['type'] == 'attraction' }
+attr = list(attrs.values())[0]
 person = list(persons.values())[0]
-print(person)
+print(attr)
+
 # label = list(person['bucket_list'].keys())[0]
 # person['bucket_list'].pop(label)
 # print(list(person['bucket_list'].keys()))

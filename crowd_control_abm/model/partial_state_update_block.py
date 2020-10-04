@@ -5,6 +5,7 @@ Model logic structure.
 
 # from .parts.environment.food_regeneration import *
 from .parts.agents.entertaining import *
+from .parts.agents.queueing import *
 from .parts.agents.movement import *
 from .parts.agents.natural_death import *
 
