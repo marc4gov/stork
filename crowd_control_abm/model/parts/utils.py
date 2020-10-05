@@ -9,25 +9,25 @@ def located_attraction(location: tuple, attractions: Dict[str, dict]):
             return k
         else:
             continue
+    return ''
 
-def remove_from_bucket_list(label, attractions: Dict[str, dict]):
+def located_person(label, persons: Dict[str, dict]):
+    for k, v in persons.items():
+        if k == label:
+            return v
+        else:
+            continue
+    return {}
+
+def remove_from_bucket_list(label, attractions: dict):
     attr = attractions.copy()
-    for k, v in attractions.items():
+    for k in attractions.keys():
         if label == k:
             # print(str(k) + " popped")
             attr.pop(k)
         else:
             continue
     return attr
-
-def entertaining_attraction(position: tuple, attractions: Dict[str, dict]):
-    for k, v in attractions.items():
-        if position[0] == v['location'][0] and position[1] == v['location'][1]:
-            return k
-        else:
-            continue
-    return False
-
 
 def check_bucket_list(attraction_label, persons: Dict[str, dict]) -> Dict[str, dict]:
     people = {k: v for k, v in persons.items()
@@ -49,23 +49,23 @@ def select_persons(number: int, candidates: Dict[str, dict]) -> Dict[str, dict]:
             break
     return selected
 
-def handle_queue(attraction_label, location: tuple, persons: Dict[str, dict], delta_money: int = 1):
-    agent_delta_money = {}
-    agent_delta_locked = {}
-    agent_delta_queue = {}
-    agent_delta_bucket_list = {}
+def empty_queue(attraction_label, location: tuple, persons: Dict[str, dict], delta_money: int = 1):
+    agent_money = {}
+    agent_locked = {}
+    agent_queue = {}
+    agent_bucket_list = {}
     nearest_attraction_locations = {}
 
     for person_label, person_properties in persons.items():
-        agent_delta_money[attraction_label] = delta_money
-        agent_delta_money[person_label] = -1 * delta_money
-        agent_delta_locked[person_label] = True
-        agent_delta_queue[person_label] = False
+        agent_money[attraction_label] = delta_money
+        agent_money[person_label] = -1 * delta_money
+        agent_locked[person_label] = True
+        agent_queue[person_label] = False
         new_bucket_list = remove_from_bucket_list(attraction_label, person_properties['bucket_list'])
-        agent_delta_bucket_list[person_label] = new_bucket_list
+        agent_bucket_list[person_label] = new_bucket_list
         if len(new_bucket_list) > 0:
             nearest_attraction_location = get_nearest_attraction_location(location, new_bucket_list)
         else:
             nearest_attraction_location = (0, 0)
         nearest_attraction_locations[person_label] = nearest_attraction_location
-    return (agent_delta_money, agent_delta_locked, agent_delta_queue, agent_delta_bucket_list, nearest_attraction_locations)
+    return (agent_money, agent_locked, agent_queue, agent_bucket_list, nearest_attraction_locations)

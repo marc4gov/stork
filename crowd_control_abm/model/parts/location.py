@@ -84,21 +84,20 @@ def get_next_location(position: tuple, attraction_location: tuple,
         return False
 
 
-def get_nearest_attraction_location(location: tuple, bucket_list: dict) -> tuple:
+def get_nearest_attraction_location(position: tuple, bucket_list: dict) -> tuple:
     distance_to_attraction = 1000
-    nearest_label = ''
-    bucket_item = {}
-    for label, properties in bucket_list.items():
-        bucket_item = properties
-        x = bucket_item["location"][0]
-        y = bucket_item["location"][1]
-        distance = np.abs(x - location[0]) + np.abs(y - location[1])
+    nearest_location = (0,0)
+    for label in bucket_list.keys():
+        attraction_location = bucket_list[label]
+        x = attraction_location[0]
+        y = attraction_location[1]
+        distance = np.abs(x - position[0]) + np.abs(y - position[1])
         if distance < distance_to_attraction:
             distance_to_attraction = distance
-            nearest_label = label
+            nearest_location = attraction_location
         else:
             continue
-    return bucket_list[nearest_label]['location']
+    return nearest_location
 
 def nearby_agents(location: tuple, agents: Dict[str, dict]) -> Dict[str, dict]:
     """

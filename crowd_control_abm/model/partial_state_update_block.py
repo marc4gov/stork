@@ -21,6 +21,14 @@ partial_state_update_block = [
     },
     {
         'policies': {
+            'accomodate_persons': p_accomodate_persons
+        },
+        'variables': {
+            'agents': s_accomodate_persons,
+        }
+    },
+    {
+        'policies': {
             'empty_queue': p_empty_queue
         },
         'variables': {
@@ -33,14 +41,6 @@ partial_state_update_block = [
         },
         'variables': {
             'agents': s_agent_entertainment
-        }
-    },
-    {
-        'policies': {
-            'accomodate_persons': p_accomodate_persons
-        },
-        'variables': {
-            'agents': s_accomodate_persons,
         }
     },
     {
