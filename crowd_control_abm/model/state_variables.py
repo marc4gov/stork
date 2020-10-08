@@ -58,7 +58,7 @@ def new_person_agent(agent_type: str, location: Tuple[int, int], attractions: [s
     return agent
 
 def new_attraction_agent(agent_type: str, location: Tuple[int, int],
-              money: int=0, waiting_line: [str] = [], capacity: int=MAX_ATTRACTION_CAPACITY) -> dict:
+               waiting_line: [str] = [''], money: int=0, capacity: int=MAX_ATTRACTION_CAPACITY) -> dict:
     agent = {'type': agent_type,
              'location': location,
              'money': money,
@@ -91,9 +91,9 @@ def generate_agents(available_locations: List[Tuple[int, int]],
 #   attractions
     for agent_type in attraction_queue:
         i = i + 1
-        location = (10 + 20 * i, 15)
+        location = (20 + 30 * i, 3 + 3 * i)
         available_locations.remove(location)
-        created_agent = new_attraction_agent(agent_type, location)
+        created_agent = new_attraction_agent(agent_type, location, {'test': (0,0)})
         initial_agents[uuid.uuid4()] = created_agent
 #   people
     attraction_agents = initial_agents.copy()
@@ -121,7 +121,7 @@ persons = {k: v for k, v in initial_agents.items() if v['type'] == 'person' }
 attrs = {k: v for k, v in initial_agents.items() if v['type'] == 'attraction' }
 attr = list(attrs.values())[0]
 person = list(persons.values())[23]
-print(person)
+print(attr)
 
 # label = list(person['bucket_list'].keys())[0]
 # person['bucket_list'].pop(label)

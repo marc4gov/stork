@@ -35,7 +35,7 @@ def check_bucket_list(attraction_label, persons: Dict[str, dict]) -> Dict[str, d
     # print(attraction_label, people)
     return people
 
-def select_persons(number: int, candidates: Dict[str, dict]) -> Dict[str, dict]:
+def select_persons(number: int, candidates: dict) -> (dict, dict):
     selected = {}
     times = number
     while times > 0:
@@ -47,7 +47,16 @@ def select_persons(number: int, candidates: Dict[str, dict]) -> Dict[str, dict]:
         except IndexError:
             print('selected is popped')
             break
-    return selected
+    return (selected, candidates)
+
+def rearrange_persons(attraction_location: tuple, persons: dict) -> dict:
+    rearranged = {}
+    i = 0
+    for person_label, person_properties in persons.items():
+        position = tuple(map(lambda x, y: x + y, attraction_location, (2 + i, 1)))
+        rearranged[person_label] = position
+        i += 1
+    return rearranged
 
 def empty_queue(attraction_label, location: tuple, persons: Dict[str, dict], delta_money: int = 1):
     agent_money = {}
