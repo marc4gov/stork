@@ -80,11 +80,11 @@ def p_empty_queue(params, substep, state_history, prev_state):
     agent_delta_bucket_list = {}
     nearest_attraction_locations = {}
 
-    print("Attractions: ", attractions)
+    # print("Attractions: ", attractions)
     for attraction_label, attraction_properties in attractions.items():
         location = attraction_properties['location']
         waiting_line = attraction_properties['waiting_line']
-        print("Waiting: ", waiting_line)
+        print("Waiting: ", len(waiting_line))
         delta_money = params['attraction_money']
         capacity = attraction_properties['capacity']
         selected_persons = {}
@@ -100,7 +100,7 @@ def p_empty_queue(params, substep, state_history, prev_state):
             agent_delta_waiting_line[attraction_label] = {'test': (0,0)}
             selected_persons = waiting_line
             agent_delta_capacity[attraction_label] = capacity - len(waiting_line)
-        print("Selected: ", selected_persons)
+        print("Selected: ", len(selected_persons))
         for person_label in selected_persons:
             agent_delta_money[attraction_label] = delta_money
             agent_delta_money[person_label] = -1 * delta_money

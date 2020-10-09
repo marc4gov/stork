@@ -11,6 +11,16 @@ def located_attraction(location: tuple, attractions: Dict[str, dict]):
             continue
     return ''
 
+def persons_in_attraction(location: tuple, persons: Dict[str, dict]) -> Dict[str, dict]:
+    persons_in_attraction = {}
+    for k, v in persons.items():
+        person_location = v['location']
+        if person_location[0] == location[0] and person_location[1] == location[1]:
+            persons_in_attraction[k] = v
+        else:
+            continue
+    return persons_in_attraction
+
 def located_person(label, persons: Dict[str, dict]):
     for k, v in persons.items():
         if k == label:

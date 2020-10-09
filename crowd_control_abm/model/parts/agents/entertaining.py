@@ -1,5 +1,5 @@
 from ..location import nearby_agents, get_next_location, get_nearest_attraction_location
-from ..utils import located_attraction, select_persons, remove_from_bucket_list
+from ..utils import located_attraction, persons_in_attraction, select_persons, remove_from_bucket_list
 import random
 
 def p_entertain_people(params, substep, state_history, prev_state):
@@ -16,17 +16,23 @@ def p_entertain_people(params, substep, state_history, prev_state):
     # agent_delta_bucket_list = {}
     agent_delta_capacity = {}
     
-    for label, properties in entertained_persons.items():
-        stay = properties['stay']
-        location = properties['location']
-        attraction_label = located_attraction(location, attractions)
+
+    for attraction_label, attraction_properties in attractions.items():
+        location = attraction_properties['location']
         capacity = attractions[attraction_label]['capacity']
-        agent_delta_stay[label] = stay + 1
-        if agent_delta_stay[label] >= params['attraction_max_stay']:
-            agent_delta_stay[label] = 0
-            agent_delta_locked[label] = False
-            if attraction_label:
-                agent_delta_capacity[attraction_label] = capacity + 1
+        persons = persons_in_attraction(location, entertained_persons)
+        for person_label, person_properties in persons.items():
+            print("Capacity at: ", attraction_label, " is: ", capacity)
+            stay = person_properties['stay']
+            stay += 1
+            if stay >= params['attraction_max_stay']:
+                agent_delta_stay[person_label] = 0
+                agent_delta_locked[person_label] = False
+                capacity += 1
+                print("Capacity free: ", attraction_label, " now: ", capacity)
+            else:
+                agent_delta_stay[person_label] = stay
+        agent_delta_capacity[attraction_label] = capacity
 
     return {'agent_delta_stay': agent_delta_stay,
             'agent_delta_locked': agent_delta_locked,
