@@ -101,7 +101,7 @@ def generate_agents(available_locations: List[Tuple[int, int]],
     for agent_type in person_queue:
         location = random.choice(available_locations)
         available_locations.remove(location)
-#       select attractions (7 in total)
+#       select attractions (3 in total)
         selected_attractions = select_attractions(attractions.copy(), 3)
         nearest_attraction_location = get_nearest_attraction_location(location, selected_attractions)
         created_agent = new_person_agent(agent_type, location, selected_attractions, nearest_attraction_location)
