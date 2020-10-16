@@ -1,14 +1,15 @@
-# Prey Predator demo
+# Crowd Control demo
 
 cadCAD P&P modelling in an dynamical system and agent-based modelling approaches.
 
 ## File Structure
 
-* lab_notebook.ipynb - The notebook for experimenting and visualizing
+* lab_odyssey.ipynb - The notebook for experimenting and visualizing
+* main.py - main script derivate of notebook
+* helpers.py - helper scripts for main.py
 * run.py - Script for running all configurated experiments
-* prey_predator_abm/ - Folder for the ABM simulation and model 
+* crowd_control_abm/ - Folder for the ABM simulation and model 
 * prey_predator_sd/ - Folder for the SD simulation and model
-* {simulation}/config.py - Simulation configuration object
 * {simulation}/sim_params.py - Simulation parameters
 * {simulation}/model/partial_state_update_block.py - The structure of the logic behind the model
 * {simulation}/model/state_variables.py - Model initial state

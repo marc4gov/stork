@@ -9,6 +9,7 @@ import uuid
 import numpy as np
 from typing import Tuple, List, Dict
 from itertools import cycle
+from enum import Enum
 
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
@@ -27,8 +28,28 @@ INITIAL_CROWD = 1
 PERSON_COUNT = 200
 ATTRACTION_COUNT = 5
 MAX_ATTRACTION_CAPACITY = 3
+agent_probabilities = [0.5,1/3,0.25,1/5,3/4,0.8]
+
+class Person(Enum):
+    parent = 1
+    child = 2
+    youngster = 3
+    aged = 4
+    single = 5
+    groupie = 6
+
+class Behaviour(Enum):
+    clumper = 1
+    conformist = 2
+    bowler = 3
+    maverick = 4
+    wallhugger = 5
 
 ## Helper functions
+
+def select_agent_behaviour(person_id, behaviour_id) -> tuple:
+    return (Person(person_id), Behaviour(behaviour_id))
+
 
 def get_nearest_attraction_location(position: tuple, bucket_list: dict) -> tuple:
     distance_to_attraction = 1000
@@ -45,10 +66,11 @@ def get_nearest_attraction_location(position: tuple, bucket_list: dict) -> tuple
             continue
     return nearest_location
 
-def new_person_agent(agent_type: str, location: Tuple[int, int], attractions: [str] = [''],
+def new_person_agent(agent_type: str, location: Tuple[int, int], person_type: Tuple[int, int], attractions: [str] = [''],
               nearest_attraction_location: Tuple[int, int] = (0,0), money: int=100, queued: bool=False, locked: bool=False, stay: int=0) -> dict:
     agent = {'type': agent_type,
              'location': location,
+             'person_type': person_type,
              'money': money,
              'bucket_list' : attractions,
              'nearest_attraction_location': nearest_attraction_location,
@@ -99,12 +121,14 @@ def generate_agents(available_locations: List[Tuple[int, int]],
     attraction_agents = initial_agents.copy()
     attractions = {k: v['location'] for k, v in attraction_agents.items()}
     for agent_type in person_queue:
+        person_type = select_agent_behaviour(random.choice([e.value for e in Person]), random.choice([e.value for e in Behaviour]) )
         location = random.choice(available_locations)
         available_locations.remove(location)
 #       select attractions (3 in total)
+
         selected_attractions = select_attractions(attractions.copy(), 3)
         nearest_attraction_location = get_nearest_attraction_location(location, selected_attractions)
-        created_agent = new_person_agent(agent_type, location, selected_attractions, nearest_attraction_location)
+        created_agent = new_person_agent(agent_type, location, person_type, selected_attractions, nearest_attraction_location)
         # print(created_agent)
         # print("\n")
         initial_agents[uuid.uuid4()] = created_agent
@@ -121,7 +145,7 @@ persons = {k: v for k, v in initial_agents.items() if v['type'] == 'person' }
 attrs = {k: v for k, v in initial_agents.items() if v['type'] == 'attraction' }
 attr = list(attrs.values())[0]
 person = list(persons.values())[23]
-print(attr)
+print(person)
 
 # label = list(person['bucket_list'].keys())[0]
 # person['bucket_list'].pop(label)
