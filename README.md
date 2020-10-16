@@ -1,6 +1,6 @@
 # Crowd Control demo
 
-cadCAD P&P modelling in an dynamical system and agent-based modelling approaches.
+cadCAD crowd agent-based modelling approaches.
 
 ## File Structure
 
