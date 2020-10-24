@@ -14,12 +14,7 @@ from enum import Enum
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 
-# fig, ax = plt.subplots()
-# line, = ax.plot(np.random.rand(10))
-# ax.set_ylim(0, 1)
-## Input parameters
-
-### World size & initial food
+### World size
 N = 200
 M = 20
 INITIAL_CROWD = 1
@@ -28,6 +23,8 @@ INITIAL_CROWD = 1
 PERSON_COUNT = 200
 ATTRACTION_COUNT = 5
 MAX_ATTRACTION_CAPACITY = 3
+
+## yet to be implemented
 agent_probabilities = [0.5,1/3,0.25,1/5,3/4,0.8]
 
 class Person(Enum):
