@@ -27,6 +27,10 @@ In state_variables.py. Making use of an N x M grid, where attractions and person
 
 Run main.py or using the Jupyter notebook. Simulation results given in about 20 sec, but visualization with animated plotly lib takes about 15-20 min for 300 timesteps with ATTRACTION_COUNT = 5 and PERSON_COUNT = 200.
 
+![Demo of visualization, squares are attraction capacities, bullets are persons](./demo1.png)
+![Demo of visualization, at timestep 99](./demo2.png)
+
+
 ## TBD
 
 * Stochastic movement of person agents via propbabilities
