@@ -33,7 +33,7 @@ Run main.py or using the Jupyter notebook. Simulation results given in about 20 
 
 ## TBD
 
-* Stochastic movement of person agents via propbabilities
+* Stochastic movement of person agents via probabilities
 * Monte Carlo simulations and parameter sweeps
 * Person class agents modeling different behaviours (family, youngsters, elderly etc. )
 * Tokenization of incentives via Ocean Protocol-like attraction tokens, art NFTs or likewise
