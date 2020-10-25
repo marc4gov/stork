@@ -1,6 +1,6 @@
 # Crowd Control demo
 
-cadCAD crowd agent-based modelling approaches.
+cadCAD crowd agent-based modelling approaches. Originally forked from prey-predator demo cadCAD model https://github.com/cadCAD-org/demos/tree/master/demos/Agent_Based_Modeling/prey_predator_abm
 
 ## File Structure
 
