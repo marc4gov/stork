@@ -25,7 +25,7 @@ ATTRACTION_COUNT = 5
 MAX_ATTRACTION_CAPACITY = 3
 
 ## yet to be implemented
-agent_probabilities = [0.5,1/3,0.25,1/5,3/4,0.8]
+agent_probabilities = [0.5,0.6,0.7,0.8,0.9,0.75]
 
 class Person(Enum):
     parent = 1
