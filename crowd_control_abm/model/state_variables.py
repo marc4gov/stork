@@ -20,7 +20,7 @@ M = 20
 INITIAL_CROWD = 1
 
 ### Initial agent count
-PERSON_COUNT = 300
+PERSON_COUNT = 200
 ATTRACTION_COUNT = 5
 MAX_ATTRACTION_CAPACITY = 3
 
@@ -73,7 +73,8 @@ def new_person_agent(agent_type: str, location: Tuple[int, int], person_type: Tu
              'nearest_attraction_location': nearest_attraction_location,
              'queued': queued,
              'locked': locked,
-             'stay': stay}
+             'stay': stay,
+             'probability': random.choice(agent_probabilities)}
     return agent
 
 def new_attraction_agent(agent_type: str, location: Tuple[int, int],

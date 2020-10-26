@@ -28,7 +28,7 @@ def busy_locations(agents: Dict[str, dict]) -> List[tuple]:
 
 def check_next_location(position: tuple,
                    all_sites: np.matrix,
-                   busy_locations: List[tuple]) -> tuple:
+                   busy_locations: List[tuple]):
     """
     Returns an list of available location tuples neighboring an given
     position location.
@@ -65,12 +65,17 @@ def check_next_location(position: tuple,
 def get_next_location(position: tuple, attraction_location: tuple,
                       all_sites: np.matrix,
                       busy_locations: List[tuple],
+                      probability
                      ):
     """
     Gets a free location neighboring an position. Returns False if
     there aren't any location available.
     """
     available_locations = check_next_location(position, all_sites, busy_locations)
+    # choose any available location if probability is lower than random nr
+    if (random.random() > probability):
+        return random.choice(available_locations)
+
     if len(available_locations) > 0:
         max_distance = 1000
         best_location = (0,0)

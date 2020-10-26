@@ -13,6 +13,7 @@ def p_move_agents(params, substep, state_history, prev_state):
     new_locations = {}
     nearest_attraction_locations = {}
     for label, properties in moving_persons.items():
+        probability = properties['probability']
         bucket_list = properties['bucket_list']
         location = properties['location']
         if len(bucket_list) > 0:
@@ -20,7 +21,7 @@ def p_move_agents(params, substep, state_history, prev_state):
         else:
             nearest_attraction_location = (0,0)
         nearest_attraction_locations[label] = nearest_attraction_location
-        new_location = get_next_location(location, nearest_attraction_location, sites, busy_locations)
+        new_location = get_next_location(location, nearest_attraction_location, sites, busy_locations, probability)
         if new_location is not False:
             new_locations[label] = new_location
             busy_locations.append(new_location)
